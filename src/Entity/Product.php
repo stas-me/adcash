@@ -24,12 +24,17 @@ class Product
     /**
      * @ORM\Column(type="integer")
      */
-    private $discount_from_quantity;
+    private $discount_from_quantity = 0;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $discount_percent;
+    private $discount_percent = 0;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $price;
 
     public function getId(): ?int
     {
@@ -68,6 +73,18 @@ class Product
     public function setDiscountPercent(float $discount_percent): self
     {
         $this->discount_percent = $discount_percent;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }
