@@ -14,7 +14,8 @@ class OrderController extends AbstractController
     /**
      * @Route("/")
      */
-    public function home(){
+    public function home()
+    {
 //        return new Response('OMG');
         return $this->render('Order/show.html.twig');
     }
