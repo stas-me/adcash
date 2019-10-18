@@ -32,13 +32,13 @@ class Order
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\product", inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="orders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\user", inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="orders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
