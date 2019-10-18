@@ -7,8 +7,9 @@ body {
 
 html {height:100%}
 
-.delete-btn{
+.btn-action{
     cursor: pointer;
+    margin-right: 8px;
 }
 
 

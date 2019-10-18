@@ -73,5 +73,25 @@ class OrderController extends AbstractController
         return $this->redirectToRoute('app_order_home');
     }
 
+    /**
+     * @Route("/edit/{id}")
+     */
+    public function edit(EntityManagerInterface $em, Request $request, Order $order)
+    {
 
+        $form = $this->createForm(OrderFormType::class, $order);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $this->addFlash('success', 'Order was edited!');
+            $order = $form->getData();
+            $order->calculateOrder();
+            $em->persist($form->getData());
+            $em->flush();
+            return $this->redirectToRoute('app_order_home');
+        }
+
+        return $this->render('Order/edit.html.twig', [
+            'orderForm' => $form->createView(),
+        ]);
+    }
 }

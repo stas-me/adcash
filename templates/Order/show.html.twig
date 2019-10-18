@@ -1,14 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+    {{ include('Order/form.html.twig', {
+        'btnText' : 'Add!'
+    }) }}
+
     <div class="col-12">
-        {{ form_start(orderForm) }}
-
-            {{ form_widget(orderForm) }}
-
-            <button type="submit" class="btn btn-primary" formnovalidate> Add! </button>
-        {{ form_end(orderForm) }}
-
         <table class="table">
             <thead>
             <tr>
@@ -34,8 +32,8 @@
                         <td>{{ order.total }}</td>
                         <td>{{ order.dateString}}</td>
                         <td>
-                            <span class="edit"> Edit </span>
-                            <span class="delete-btn" onclick="ConfirmDelete('{{ path('app_order_delete', {'id' : order.id}) }}')"> Delete </span>
+                            <a href="{{ path('app_order_edit', {'id' : order.id}) }}" class="btn btn-primary btn-action edit-url"> Edit </a>
+                            <span class="btn btn-primary btn-action" onclick="ConfirmDelete('{{ path('app_order_delete', {'id' : order.id}) }}')"> Delete </span>
                         </td>
                     </tr>
                 {% endfor %}
