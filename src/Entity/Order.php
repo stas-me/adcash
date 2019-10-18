@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
+ * @ORM\Table(name="`order`")
  */
 class Order
 {
@@ -18,6 +20,8 @@ class Order
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
+     * @Assert\Range(min=1, minMessage="You should order at least 1 item.")
      */
     private $quantity;
 
@@ -32,13 +36,15 @@ class Order
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="orders")
+     * @Assert\NotBlank
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", fetch="EAGER", inversedBy="orders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="orders")
+     * @Assert\NotBlank
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", fetch="EAGER", inversedBy="orders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -77,6 +83,11 @@ class Order
         return $this->date;
     }
 
+    public function getDateString(): string
+    {
+        return $this->getDate()->format('Y-m-d H:i:s');
+    }
+
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
@@ -106,5 +117,21 @@ class Order
         $this->user = $user;
 
         return $this;
+    }
+
+    public function calculateOrder(): void
+    {
+        $prod = $this->getProduct();
+        $total = $prod->getPrice() * $this->getQuantity();
+        if( $prod->getDiscountFromQuantity() > 0 && $prod->getDiscountFromQuantity() <= $this->getQuantity() ){
+            $total *= (100 - $prod->getDiscountPercent());
+            $total /= 100;
+        }
+
+        $this->setTotal($total);
+
+        if( !$this->getId() ){
+            $this->setDate( new \DateTime('now') );
+        }
     }
 }

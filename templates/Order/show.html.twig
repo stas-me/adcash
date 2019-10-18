@@ -4,35 +4,41 @@
 <h1>
     {#{{ slug }}#}
 </h1>
+    {{ form_start(orderForm) }}
+
+        {{ form_widget(orderForm) }}
+
+        <button type="submit" class="btn btn-primary" formnovalidate> Add! </button>
+    {{ form_end(orderForm) }}
+
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">ID</th>
+            <th scope="col">User</th>
+            <th scope="col">Product</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total</th>
+            <th scope="col">Date</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
 
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-        </tr>
+            {% for order in orders %}
+                <tr>
+                    <th scope="row">{{ order.id }}</th>
+                    <td>{{ order.user.name }}</td>
+                    <td>{{ order.product.name }}</td>
+                    <td>{{ order.product.price }} EUR</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.total }}</td>
+                    <td>{{ order.dateString}}</td>
+                    <td>edit delete</td>
+                </tr>
+            {% endfor %}
+
         </tbody>
     </table>
 {% endblock %}

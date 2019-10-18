@@ -48,7 +48,20 @@
     </div>
 </nav>
 
-{% block body %}{% endblock %}
+
+<div class="container">
+    <div class="row">
+
+        {% for msg in app.session.flashBag.get('success') %}
+            <div class="alert alert-success">
+                {{ msg }}
+            </div>
+        {% endfor %}
+
+        {% block body %}{% endblock %}
+
+    </div>
+</div>
 
 <footer class="footer">
     <div class="container text-center">
