@@ -19,16 +19,6 @@ class Order
     /**
      * @ORM\Column(type="integer")
      */
-    private $user_id;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $product_id;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
     private $quantity;
 
     /**
@@ -41,33 +31,21 @@ class Order
      */
     private $date;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\product", inversedBy="orders")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $product;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\user", inversedBy="orders")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->user_id;
-    }
-
-    public function setUserId(int $user_id): self
-    {
-        $this->user_id = $user_id;
-
-        return $this;
-    }
-
-    public function getProductId(): ?int
-    {
-        return $this->product_id;
-    }
-
-    public function setProductId(int $product_id): self
-    {
-        $this->product_id = $product_id;
-
-        return $this;
     }
 
     public function getQuantity(): ?int
@@ -102,6 +80,30 @@ class Order
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): self
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
