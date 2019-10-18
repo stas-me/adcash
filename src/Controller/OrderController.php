@@ -41,21 +41,37 @@ class OrderController extends AbstractController
             $order->calculateOrder();
             $em->persist($form->getData());
             $em->flush();
-//            dd($form->getData());
             return $this->redirectToRoute('app_order_home');
         }
-
-
 
         $repo = $em->getRepository(Order::class);
         $orders = $repo->findAll();
 
-
-
-//        return new Response('OMG');
         return $this->render('Order/show.html.twig', [
             'orderForm' => $form->createView(),
             'orders' => $orders
         ]);
     }
+
+
+    /**
+     * @Route("/delete/{id}")
+     */
+    public function delete($id){
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(Order::class);
+        $order = $repo->find($id);
+
+        if( !isset($order) ){
+            $this->addFlash('error', 'Order does not exist!');
+        }else{
+            $em->remove($order);
+            $em->flush();
+            $this->addFlash('success', 'Order has been deleted!');
+
+        }
+        return $this->redirectToRoute('app_order_home');
+    }
+
+
 }
