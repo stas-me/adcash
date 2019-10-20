@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Order|null find($id, $lockMode = null, $lockVersion = null)
@@ -23,9 +24,10 @@ class OrderRepository extends ServiceEntityRepository
     /**
      * @param string|null $search
      * @param int|null $period
-     * @return mixed
+     * @return QueryBuilder
      */
-    public function findWithSearch(?string $search, ?int $period){
+    public function getFilterQueryBuilder(?string $search, ?int $period): QueryBuilder
+    {
          $qb = $this->createQueryBuilder('o')
             ->innerJoin('o.user', 'u')
             ->innerJoin('o.product', 'p')
@@ -45,7 +47,7 @@ class OrderRepository extends ServiceEntityRepository
 
          $qb->orderBy('o.date', 'DESC');
 
-         return $qb->getQuery()->getResult();
+         return $qb;
 
 
     }

@@ -8,9 +8,9 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Form\OrderFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class OrderController extends AbstractController
@@ -18,19 +18,8 @@ class OrderController extends AbstractController
     /**
      * @Route("/")
      */
-    public function home(EntityManagerInterface $em, Request $request)
+    public function home(EntityManagerInterface $em, Request $request, PaginatorInterface $paginator )
     {
-
-//        $user = new User();
-//        dump($user);
-//        $user->setName('Bob');
-//        $em->persist($user);
-//        $em->flush();
-//
-//
-//        return new Response('added ' . $user->getName() . ' id: '.$user->getId());
-
-
         $form = $this->createForm(OrderFormType::class);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
@@ -49,12 +38,17 @@ class OrderController extends AbstractController
         }
 
         $repo = $em->getRepository(Order::class);
-//        $orders = $repo->findAll();
-        $orders = $repo->findWithSearch($search, $period);
+        $ordersQB = $repo->getFilterQueryBuilder($search, $period);
+
+        $pagination = $paginator->paginate(
+            $ordersQB,
+            $request->query->getInt('page', 1),
+            3
+        );
 
         return $this->render('Order/show.html.twig', [
             'orderForm' => $form->createView(),
-            'orders' => $orders
+            'pagination' => $pagination
         ]);
     }
 

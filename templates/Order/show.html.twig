@@ -41,7 +41,7 @@
                 </thead>
                 <tbody>
 
-                    {% for order in orders %}
+                    {% for order in pagination %}
                         <tr>
                             <th scope="row">{{ order.id }}</th>
                             <td>{{ order.user.name }}</td>
@@ -63,6 +63,7 @@
 
                 </tbody>
             </table>
+            {{ knp_pagination_render(pagination) }}
         </div>
     </div>
 {% endblock %}
