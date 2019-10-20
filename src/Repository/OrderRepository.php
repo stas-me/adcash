@@ -19,6 +19,37 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
+
+    /**
+     * @param string|null $search
+     * @param int|null $period
+     * @return mixed
+     */
+    public function findWithSearch(?string $search, ?int $period){
+         $qb = $this->createQueryBuilder('o')
+            ->innerJoin('o.user', 'u')
+            ->innerJoin('o.product', 'p')
+            ->addSelect('u')
+            ->addSelect('p');
+
+         if($search){
+             $qb->andWhere('u.name LIKE :search OR p.name LIKE :search')
+                ->setParameter('search', '%'.$search.'%');
+         }
+
+         if($period){
+             $date = date('Y-m-d', strtotime('-'. ($period - 1) .' days'));
+             $qb->andWhere('o.date > :date')
+                 ->setParameter('date', $date);
+         }
+
+         $qb->orderBy('o.date', 'DESC');
+
+         return $qb->getQuery()->getResult();
+
+
+    }
+
     // /**
     //  * @return Order[] Returns an array of Order objects
     //  */

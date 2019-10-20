@@ -37,14 +37,14 @@ class Order
 
     /**
      * @Assert\NotBlank
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", fetch="EAGER", inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="orders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
 
     /**
      * @Assert\NotBlank
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", fetch="EAGER", inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="orders")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;

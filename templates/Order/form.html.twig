@@ -1,8 +1,10 @@
 <div class="col-12">
-    {{ form_start(orderForm) }}
+    <div class="row">
+        {{ form_start(orderForm) }}
 
-    {{ form_widget(orderForm) }}
+        {{ form_widget(orderForm) }}
 
-    <button type="submit" class="btn btn-primary" formnovalidate> {{ btnText }} </button>
-    {{ form_end(orderForm) }}
+        <button type="submit" class="btn btn-primary" formnovalidate> {{ btnText }} </button>
+        {{ form_end(orderForm) }}
+    </div>
 </div>

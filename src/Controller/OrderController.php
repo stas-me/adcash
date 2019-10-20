@@ -5,9 +5,7 @@ namespace App\Controller;
 
 
 
-use App\Entity\Product;
 use App\Entity\Order;
-use App\Entity\User;
 use App\Form\OrderFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,8 +42,15 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('app_order_home');
         }
 
+        $search = $request->query->get('q');
+        $period = $request->query->get('p');
+        if( $period != 7 && $period != 1 ){
+            $period = 0;
+        }
+
         $repo = $em->getRepository(Order::class);
-        $orders = $repo->findAll();
+//        $orders = $repo->findAll();
+        $orders = $repo->findWithSearch($search, $period);
 
         return $this->render('Order/show.html.twig', [
             'orderForm' => $form->createView(),

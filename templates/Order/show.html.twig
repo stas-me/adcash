@@ -7,38 +7,62 @@
     }) }}
 
     <div class="col-12">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">User</th>
-                <th scope="col">Product</th>
-                <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Total</th>
-                <th scope="col">Date</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
+        <div class="row">
+            <form class="filter-row">
+                <select class="period-select" name="p">
+                    <option value="0" {% if(app.request.query.get('p') == 0) %} selected {% endif %} >All time</option>
+                    <option value="7" {% if(app.request.query.get('p') == 7) %} selected {% endif %} >Last 7 days</option>
+                    <option value="1" {% if(app.request.query.get('p') == 1) %} selected {% endif %} >Today</option>
+                </select>
 
-                {% for order in orders %}
-                    <tr>
-                        <th scope="row">{{ order.id }}</th>
-                        <td>{{ order.user.name }}</td>
-                        <td>{{ order.product.name }}</td>
-                        <td>{{ order.product.price }} EUR</td>
-                        <td>{{ order.quantity }}</td>
-                        <td>{{ order.total }}</td>
-                        <td>{{ order.dateString}}</td>
-                        <td>
-                            <a href="{{ path('app_order_edit', {'id' : order.id}) }}" class="btn btn-primary btn-action edit-url"> Edit </a>
-                            <span class="btn btn-primary btn-action" onclick="ConfirmDelete('{{ path('app_order_delete', {'id' : order.id}) }}')"> Delete </span>
+                <input type="text" placeholder="Enter search term..." name="q" value="{{ app.request.query.get('q') }}" autocomplete="off">
+                <input type="submit" value="Search" class="btn btn-primary search-btn">
+                {% if( app.request.query.get('p') or app.request.query.get('q') ) %}
+                    <a href="{{ path('app_order_home') }}" class="btn btn-primary">Reset filter</a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="row">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                    {% for order in orders %}
+                        <tr>
+                            <th scope="row">{{ order.id }}</th>
+                            <td>{{ order.user.name }}</td>
+                            <td>{{ order.product.name }}</td>
+                            <td>{{ order.product.price }} EUR</td>
+                            <td>{{ order.quantity }}</td>
+                            <td>{{ order.total }}</td>
+                            <td>{{ order.dateString}}</td>
+                            <td>
+                                <a href="{{ path('app_order_edit', {'id' : order.id}) }}" class="btn btn-primary btn-action edit-url"> Edit </a>
+                                <span class="btn btn-primary btn-action" onclick="ConfirmDelete('{{ path('app_order_delete', {'id' : order.id}) }}')"> Delete </span>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <td colspan="8" class="text-center">
+                            No orders found!
                         </td>
-                    </tr>
-                {% endfor %}
+                    {% endfor %}
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}
